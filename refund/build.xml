@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+@author:剑平（明河）<minghe36@126.com>
+-->
+<project name="build.demo" default="build" xmlns:ac="antlib:net.sf.antcontrib">
+    <description>Refund Build File</description>
+    <!--当前文件目录路径-->
+    <dirname property="current.dir" file="${ant.file.refund}"/>
+    <property name="src.dir" location="${current.dir}/src/"/>
+    <property name="build.dir" location="${current.dir}/build/"/>
+    <!--页面初始化脚本目录路径-->
+    <property name="inits.dir" location="${src.dir}/refund/inits/"/>
+    <!--页面脚本合并后的路径-->
+    <property name="combines.dir" location="${build.dir}/refund/inits/"/>
+    <!--工具路径，需要根据本地情况做修改-->
+    <property name="tool.dir" location="d:\www\htdocs\kissy-tools\"/>
+    <!--模块合并工具路径-->
+    <property name="module.compiler" location="${tool.dir}/module-compiler.jar"/>
+
+    <target name="build" depends="create-combine-dir,all-combine">
+        
+    </target>
+    <!--创建时间戳目录-->
+    <target name="create-combine-dir">
+        <mkdir dir="${combines.dir}"/>
+    </target>
+    <target name="all-combine">
+        <ac:for param="page">
+            <path>
+                <fileset dir="${inits.dir}" includes="*.js" excludes="*.combine.js,*-min.js"/>
+            </path>
+            <sequential>
+                <ac:var name="var.modname" unset="true"/>
+                <basename property="var.modname" file="@{page}" suffix=".js"/>
+                <echo>
+                    build ${var.modname} in @{page}
+                </echo>
+                <java classname="com.taobao.f2e.Main">
+                    <arg value="-requires"/>
+                    <arg value="refund/inits/${var.modname}"/>
+                    <arg value="-baseUrls"/>
+                    <arg value="${src.dir}"/>
+                    <arg value="-encodings"/>
+                    <arg value="utf-8,gbk"/>
+                    <arg value="-outputEncoding"/>
+                    <arg value="utf-8"/>
+                    <arg value="-output"/>
+                    <arg value="${combines.dir}/${var.modname}.js"/>
+                    <classpath>
+                        <pathelement path="${module.compiler}"/>
+                        <pathelement path="${java.class.path}"/>
+                    </classpath>
+                </java>
+
+            </sequential>
+        </ac:for>
+    </target>
+</project>

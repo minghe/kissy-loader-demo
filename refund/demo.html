@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="gbk"/>
+    <title>kissy1.2 loader demo</title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
+    <script src="config.js"></script>
+    <script type="text/javascript">
+        Package.init();
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+    KISSY.use('refund/inits/apply',function(S,Apply){
+        var msg = Apply();
+        S.log(msg);
+    })
+</script>
+</body>
+</html>
